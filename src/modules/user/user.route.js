@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { deleteUser, getAllUsers, register, updateUser, login } from "./user.controller.js";
+import { deleteUser, getAllUsers, register, updateUser, login, deleteAllUsers } from "./user.controller.js";
 import express from "express";
 import { checkEmail } from "../../middleware/checkEmail.js";
 
@@ -17,6 +17,8 @@ userRoutes.post("/users/login", login);
 userRoutes.put("/users/:id", updateUser);
 
 userRoutes.delete("/users/:id", deleteUser);
+
+userRoutes.delete("/deleteAllUsers", deleteAllUsers);
 
 
 

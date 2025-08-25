@@ -1,5 +1,6 @@
 import { UserModel } from "../../../db/models/user.model.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const getAllUsers = async (req, res) => {
   const users = await UserModel.find();
@@ -26,8 +27,9 @@ const login = async(req, res) => {
     if(!match){
         return res.status(401).json({message: "Invalid Email or Password"});
     }
-    res.json({message: `Welcome Back ${exist.firstName} ${exist.lastName}`});
-
+    const token = jwt.sign({_id: exist._id, role: exist.role}, process.env.JWT_SECRET);
+    
+    res.json({message: `Welcome Back ${exist.firstName} ${exist.lastName}`, token});
 }
 
 const updateUser = async (req, res) => {
@@ -46,4 +48,13 @@ const deleteUser = async (req, res) => {
   res.json({ message: "User Deleted", deletedUser });
 };
 
-export { getAllUsers, register, updateUser, deleteUser, login };
+const deleteAllUsers = async(req, res) => {
+    try {
+    const result = await UserModel.deleteMany({});
+    res.json({ message: "All Users Deleted", result });
+  } catch (err) {
+    res.status(500).json({ message: "Error Deleting Users", err });
+  }
+}
+
+export { getAllUsers, register, updateUser, deleteUser, login, deleteAllUsers };
