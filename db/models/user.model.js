@@ -4,7 +4,11 @@ import mongoose, { Schema } from "mongoose";
 const userSchema = new Schema({
     firstName: String,
     lastName: String,
-    email: String,
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
     password: String,
     birthDate: Date,
     age: Number,
